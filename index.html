@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Bootstrap 101 Template</title>
+    <title>The Social Graph ;)</title>
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/docs.css" rel="stylesheet"> 
 <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      
+      background-color:black;
 	}
     </style>
 
@@ -15,33 +16,272 @@
   </head>
   <body>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/sigma.min.js"></script>
 
-<div class="navbar navbar-inverse navbar-fixed-top" style="background-color:black;">
-        <div class="container">
-<!--         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a> --> 
-          <a class="brand" href="#">Social Graph</a>
-        </div>
-    </div>
-
+<h1 style="text-align:right; padding-right:10px">Social Graph ;) </h1>
 
  <div class="container-fluid">
 
-      <div class="row-fluid">
-        <div class="span3">
-	<div class="hero-unit" style="height:600px;">
+
+<div class="row-fluid">
+
+	<div class="span3">
+	<div class="hero-unit" style="height:600px;padding-left:35px">
+	<form>
+	<fieldset>
+	<label>Enter dem Persons</label>
+	<input type="text" id="p1">
+	<input type="text" id="p2">
+	<input type="text" id="p3">
+	<input type="text" id="p4">
+	<input type="text" id="p5">
+	<button type="submit" class="btn" id="submit1">Add people</button>
+	<label>Add in Relationships</label>
+	<label>Person 1</label>
+	<select multiple="multiple" class="plist" id="plist1">
+	</select>
+	<label>Person 2</label>
+	<select multiple="multiple" class="plist" id="plist2">
+	</select>
+
+<label class="radio">
+  <input type="radio" name="optionsRadios" id="opt" value="1" checked>
+  Friends
+</label>
+<label class="radio">
+  <input type="radio" name="optionsRadios" id="opt2" value="2">
+  Special Friends
+</label>
+<label class="radio">
+  <input type="radio" name="optionsRadios" id="opt3" value="3">
+  In Relationship
+</label>
+<label class="radio">
+  <input type="radio" name="optionsRadios" id="opt4" value="4">
+ Enemies
+</label>
+
+
+
+	<button type="submit" class="btn" id="submit2">Generate Graph</button>
+	</fieldset>
+	</form>
+	
+
 	</div>
 	</div>
-	<div class="span9">
-	<div class="hero-unit" style="height:600px;">
-	</div>
-	</div>
+
+	
+	<div class="span9 sigma-parent" id="sigma-example-parent">
+    	<div class="sigma-expand" id="sigma-example"></div>
+  	</div>
+	
+
 </div>
-</div> 
+
+<script src="js/sigma.parseGexf.js"></script>
+<script type="text/javascript">function init() {
+  // Instanciate sigma.js and customize it :
+  var sigInst = sigma.init(document.getElementById('sigma-example')).drawingProperties({
+    defaultLabelColor: '#fff'
+  });
+var counter=0;
+var colors=new Array(); 
+colors[0]="black";
+colors[1]="blue";
+colors[2]="orange";
+colors[3]="yellow";
+colors[4]="white";
+
+
+/*
+  for(i = 0; i < N; i++){
+    sigInst.addNode('n'+i,{
+      'x': Math.cos(Math.PI*(2*i)/50)/4,
+      'y': Math.sin(Math.PI*(2*i+1)/50)/4,
+      'label': 'Node '+i,
+      'size': 5,
+      'color': 'rgb('+Math.round(Math.random()*256)+','+
+                      Math.round(Math.random()*256)+','+
+                      Math.round(Math.random()*256)+')'
+    });
+  }
+
+  for(i = 0; i < E; i++){
+    sigInst.addEdge(i,'n'+(Math.random()*N|0),'n'+(Math.random()*N|0));
+  }
+
+  // Draw the graph :
+  sigInst.draw();
+*/
+//DONT MIX JS and JQUERY BITCH
+
+document.getElementById('submit1').addEventListener('click',function(){
+var i;
+for(i=1; i< 6;i++){
+	var t="#p"+i;
+	var y=$(t).val();
+		if(y!=""){
+		$(".plist").append("<option>"+y+"</option>");
+		sigInst.addNode(y,{
+			'x':Math.random(),
+			'y':Math.random(),
+			'label':y,
+			'size':5,
+			'color':'red'
+			});
+	}
+}
+sigInst.draw();
+}
+,true);
+
+document.getElementById('submit2').addEventListener('click',function(){
+var peeps=$(":selected");
+var type=$("input:checked").val();
+sigInst.addEdge(counter,$(peeps[0]).val(),$(peeps[1]).val(),{'size':4,'color':colors[parseInt(type)]});
+sigInst.draw();
+counter++;
+},true);
+
+
+
+
+}
+
+if (document.addEventListener) {
+  document.addEventListener('DOMContentLoaded', init, false);
+} else {
+  window.onload = init;
+}
+</script>
+
+
+
+<style type="text/css">
+  /* sigma.js context : */
+  .sigma-parent {
+    position: relative;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    
+    height: 600px;
+  }
+  .sigma-expand {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+  
+</style>
+
+
+
+
+</div>
+ <!--
+<script src="/js/sigma.parseGexf.js"><script type="text/javascript">function init() {
+  // The following method will parse the related sigma instance nodes
+  // and set their positions around a circle:
+  sigma.publicPrototype.myCircularLayout = function() {
+    var R = 100,
+        i = 0,
+        L = this.getNodesCount();
+
+    this.iterNodes(function(n){
+      n.x = Math.cos(Math.PI*(i++)/L)*R;
+      n.y = Math.sin(Math.PI*(i++)/L)*R;
+    });
+
+    return this.position(0,0,1).draw();
+  };
+
+  // The following method will parse the related sigma instance nodes
+  // and set its position to as random in a square around the center:
+  sigma.publicPrototype.myRandomLayout = function() {
+    var W = 100,
+        H = 100;
+    
+    this.iterNodes(function(n){
+      n.x = W*Math.random();
+      n.y = H*Math.random();
+    });
+
+    return this.position(0,0,1).draw();
+  };
+
+  // Instanciate sigma.js and customize it :
+  var sigInst = sigma.init(document.getElementById('sigma-example')).drawingProperties({
+    defaultLabelColor: '#fff'
+  });
+
+  // Generate a random graph with :
+  //   . N nodes
+  //   . E edges
+  var i, N = 500, E = 3000;
+
+  for(i = 0; i < N; i++){
+    sigInst.addNode('n'+i,{
+      'x': Math.random(),
+      'y': Math.random(),
+      'label': 'Node '+i,
+      'size': 0.5+4.5*Math.random(),
+      'color': 'rgb('+Math.round(Math.random()*256)+','+
+                      Math.round(Math.random()*256)+','+
+                      Math.round(Math.random()*256)+')'
+    });
+  }
+
+  for(i = 0; i < E; i++){
+    sigInst.addEdge(i,'n'+(Math.random()*N|0),'n'+(Math.random()*N|0));
+  }
+
+  // Draw the graph :
+  sigInst.draw();
+
+  // Finally, let's bind our methods to some buttons:
+  document.getElementById('circular').addEventListener('click',function(){
+    sigInst.myCircularLayout();
+  },true);
+  document.getElementById('random').addEventListener('click',function(){
+    sigInst.myRandomLayout();
+  },true);
+}
+
+if (document.addEventListener) {
+  document.addEventListener('DOMContentLoaded', init, false);
+} else {
+  window.onload = init;
+}
+</script>
+
+<style type="text/css">
+  /* sigma.js context : */
+  .sigma-parent {
+    position: relative;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    background: #222;
+    height: 500px;
+  }
+  .sigma-expand {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+  .buttons-container{
+    padding-bottom: 8px;
+    padding-top: 12px;
+  }
+</style>
+-->
 
  </body>
 </html>
